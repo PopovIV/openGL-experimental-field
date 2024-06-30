@@ -14,31 +14,77 @@
 
 
 #define WINDOW_HEIGHT 800
-#define WINDOW_WIDHT 800
+#define WINDOW_WIDHT 1200
 #define FIELD_OF_VIEW 45.0f
 #define Z_NEAR 0.1f
 #define Z_FAR 100.0f
 
 // Vertices coordinates
-GLfloat vertices[] =
-{ //     COORDINATES     /        COLORS      /   TexCoord  //
-	-0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	0.0f, 0.0f,
-	-0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	5.0f, 0.0f,
-	 0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	0.0f, 0.0f,
-	 0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	5.0f, 0.0f,
-	 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	2.5f, 5.0f
+GLfloat pyramidVertices[] =
+{ //     COORDINATES     /        COLORS          /    TexCoord   /        NORMALS       //
+	-0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,      0.0f, -1.0f, 0.0f, // Bottom side
+	-0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 5.0f,      0.0f, -1.0f, 0.0f, // Bottom side
+	 0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 5.0f,      0.0f, -1.0f, 0.0f, // Bottom side
+	 0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, -1.0f, 0.0f, // Bottom side
+
+	-0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,     -0.8f, 0.5f,  0.0f, // Left Side
+	-0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,     -0.8f, 0.5f,  0.0f, // Left Side
+	 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,     -0.8f, 0.5f,  0.0f, // Left Side
+
+	-0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
+	 0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 0.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
+	 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
+
+	 0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 0.0f,      0.8f, 0.5f,  0.0f, // Right side
+	 0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.8f, 0.5f,  0.0f, // Right side
+	 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.8f, 0.5f,  0.0f, // Right side
+
+	 0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, 0.5f,  0.8f, // Facing side
+	-0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,      0.0f, 0.5f,  0.8f, // Facing side
+	 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.0f, 0.5f,  0.8f  // Facing side
 };
 
 
 // Indices for vertices order
-GLuint indices[] =
+GLuint pyramidIndices[] =
+{
+	0, 1, 2, // Bottom side
+	0, 2, 3, // Bottom side
+	4, 6, 5, // Left side
+	7, 9, 8, // Non-facing side
+	10, 12, 11, // Right side
+	13, 15, 14 // Facing side
+};
+
+
+GLfloat cubeVertices[] =
+{ //     COORDINATES     //
+	-0.1f, -0.1f,  0.1f,
+	-0.1f, -0.1f, -0.1f,
+	 0.1f, -0.1f, -0.1f,
+	 0.1f, -0.1f,  0.1f,
+	-0.1f,  0.1f,  0.1f,
+	-0.1f,  0.1f, -0.1f,
+	 0.1f,  0.1f, -0.1f,
+	 0.1f,  0.1f,  0.1f
+};
+
+
+// Indices for vertices order
+GLuint cubeIndices[] =
 {
 	0, 1, 2,
 	0, 2, 3,
-	0, 1, 4,
-	1, 2, 4,
-	2, 3, 4,
-	3, 0, 4
+	0, 4, 7,
+	0, 7, 3,
+	3, 7, 6,
+	3, 6, 2,
+	2, 6, 5,
+	2, 5, 1,
+	1, 5, 4,
+	1, 4, 0,
+	4, 5, 6,
+	4, 6, 7
 };
 
 
@@ -72,6 +118,7 @@ int main() {
 	// Set up the viewport
 	glViewport(0, 0, WINDOW_WIDHT, WINDOW_HEIGHT);
 
+    // MAIN SHADER
 	// Create shader program using default shaders
 	Shader shaderProgram("default.vert", "default.frag");
 
@@ -80,27 +127,68 @@ int main() {
 	VAO1.Bind();
 
 	// Create vertex buffer object and link it to vertices
-	VBO VBO1(vertices, sizeof(vertices));
+	VBO VBO1(pyramidVertices, sizeof(pyramidVertices));
 	// Create elements buffer object and link it to indices
-	EBO EBO1(indices, sizeof(indices));
+	EBO EBO1(pyramidIndices, sizeof(pyramidIndices));
 
 	// Link VBO to VAO
-	// For basics 6 floats is per vertex data rn
-	VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
-	VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	VAO1.LinkAttrib(VBO1, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-
+	// For basics 11 floats is per vertex data rn
+	VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 11 * sizeof(float), (void*)0);
+	VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 11 * sizeof(float), (void*)(3 * sizeof(float)));
+	VAO1.LinkAttrib(VBO1, 2, 2, GL_FLOAT, 11 * sizeof(float), (void*)(6 * sizeof(float)));
+	VAO1.LinkAttrib(VBO1, 3, 3, GL_FLOAT, 11 * sizeof(float), (void*)(8 * sizeof(float)));
 	// Unbind all
 	VAO1.Unbind();
 	VBO1.Unbind();
 	EBO1.Unbind();
+	//
 
-	// ID of uniform variable called "scale"
-	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
+	// CUBE/LIGHT SHADER
+	// Create shader program using light shaders
+	Shader lightShader("light.vert", "light.frag");
+
+	// Create vertex array object and bind it
+	VAO cubeVAO;
+	cubeVAO.Bind();
+
+	// Create vertex buffer object and link it to vertices
+	VBO cubeVBO(cubeVertices, sizeof(cubeVertices));
+	// Create elements buffer object and link it to indices
+	EBO cubeEBO(cubeIndices, sizeof(cubeIndices));
+
+	// Link VBO to VAO
+	VAO1.LinkAttrib(cubeVBO, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
+
+	// Unbind all
+	cubeVAO.Unbind();
+	cubeVBO.Unbind();
+	cubeEBO.Unbind();
+	//
+	
 
 	// Texture
 	Texture brickTex("brick.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 	brickTex.texUnit(shaderProgram, "tex0", 0);
+
+	// Cube and pyramid params
+	glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	glm::vec3 lightPos = glm::vec3(0.5f, 0.5f, 0.5f);
+	glm::mat4 lightModel = glm::mat4(1.0f);
+	lightModel = glm::translate(lightModel, lightPos);
+
+	glm::vec3 pyramidPos = glm::vec3(0.0f, 0.0f, 0.0f);
+	glm::mat4 pyramidModel = glm::mat4(1.0f);
+	pyramidModel = glm::translate(pyramidModel, pyramidPos);
+
+	lightShader.Activate();
+	glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(lightModel));
+	glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+	
+	shaderProgram.Activate();
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(pyramidModel));
+	glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+	glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
+
 
 	// Pyramid rotation
 	float rotation = 0.0f;
@@ -117,13 +205,12 @@ int main() {
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
 		// Clean back and depth buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		// Set up shader program
-		shaderProgram.Activate();
 
 		// Camera update
 		camera.HandleInput(window);
-		camera.Update(FIELD_OF_VIEW, Z_NEAR, Z_FAR, shaderProgram, "camMatrix");
+		camera.Update(FIELD_OF_VIEW, Z_NEAR, Z_FAR);
 
+		// objects update
 		double curTime = glfwGetTime();
 		if (curTime - prevTime >= 1 / 60) {
 			rotation += 0.5f;
@@ -134,22 +221,32 @@ int main() {
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f));
 
-		// Send matricies to vertex shader
-		int modelLoc = glGetUniformLocation(shaderProgram.ID, "model");
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-
-		// Set up uniform variable for scale
-		glUniform1f(uniID, 0.5f);
-
+		// Render pyramid
+		// Set up shader program
+		shaderProgram.Activate();
+		// Update camera pos on gpu
+ 	    glUniform3f(glGetUniformLocation(shaderProgram.ID, "camPos"), camera.position.x, camera.position.y, camera.position.z);
+		// Update matries
+		camera.UpdateMatrix(shaderProgram, "camMatrix");
+		glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(model));
 		// Bind texture
 		brickTex.Bind();
-
 		// Bind VAO
 		VAO1.Bind();
-		
 		// Draw call
-		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, sizeof(pyramidIndices) / sizeof(int), GL_UNSIGNED_INT, 0);
+		//
 
+		// Render Light
+		// Set up light shader
+		lightShader.Activate();
+		// Export the camMatrix to the Vertex Shader of the light cube
+		camera.UpdateMatrix(lightShader, "camMatrix");
+		// Bind the VAO so OpenGL knows to use it
+		cubeVAO.Bind();
+		// Draw primitives, number of indices, datatype of indices, index of indices
+		glDrawElements(GL_TRIANGLES, sizeof(cubeIndices) / sizeof(int), GL_UNSIGNED_INT, 0);
+		
 		// Swap buffers
 		glfwSwapBuffers(window);
 
@@ -163,6 +260,10 @@ int main() {
 	EBO1.Delete();
 	shaderProgram.Delete();
 	brickTex.Delete();
+	cubeVAO.Delete();
+	cubeVBO.Delete();
+	cubeEBO.Delete();
+	lightShader.Delete();
 
 	// Destroy window
 	glfwDestroyWindow(window);

@@ -9,8 +9,8 @@ Camera::Camera(int windowWidth, int windowHeight, glm::vec3 position)
 }
 
 
-// Update and export the camera matrix to the Vertex Shader
-void Camera::Update(float FOVdeg, float nearPlane, float farPlane, Shader& shader, const char* uniform)
+// Update the camera matrix
+void Camera::Update(float FOVdeg, float nearPlane, float farPlane)
 {
 	// Init matrices
 	glm::mat4 view = glm::mat4(1.0f);
@@ -21,10 +21,15 @@ void Camera::Update(float FOVdeg, float nearPlane, float farPlane, Shader& shade
 	// Adds perspective to the scene
 	projection = glm::perspective(glm::radians(FOVdeg), (float)(windowWidth / windowHeight), nearPlane, farPlane);
 
-	// Exports the camera matrix to the Vertex Shader
-	glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(projection * view));
+	viewProj = projection * view;
 }
 
+
+// Export the camera matrix to the Vertex Shader
+void Camera::UpdateMatrix(Shader& shader, const char* uniform)
+{
+	glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(viewProj));
+}
 
 // Handle camera inputs
 // TODO: really should rewrite this later
