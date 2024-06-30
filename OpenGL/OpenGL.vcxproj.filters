@@ -16,6 +16,9 @@
     <Filter Include="Файлы ресурсов\Shaders">
       <UniqueIdentifier>{2669ff7f-09a1-4d01-8281-07645ad6af61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы ресурсов\textures">
+      <UniqueIdentifier>{8486336b-4afe-4ec4-880b-35e78601f435}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -34,6 +37,12 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="EBO.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="stb.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -58,5 +67,13 @@
     <ClInclude Include="EBO.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\Downloads\pop_cat.png">
+      <Filter>Файлы ресурсов\textures</Filter>
+    </Image>
   </ItemGroup>
 </Project>

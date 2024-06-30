@@ -14,7 +14,7 @@ public:
 	VAO() { glGenVertexArrays(1, &ID); };
 
 	// Link VBO to VAO using certain layout
-	void LinkVBO(VBO& VBO, GLuint layout);
+	void LinkAttrib(VBO& VBO, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, void* offset);
 	// Bind VAO
 	void Bind() { glBindVertexArray(ID); };
 	// Unbind VAO

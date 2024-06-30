@@ -24,5 +24,8 @@ public:
 	void Activate() { glUseProgram(ID); };
 	// Delete shader program
 	void Delete() { glDeleteProgram(ID); };
+private:
+	// Shader compilation checker
+	void CompileErrors(unsigned int shader, const char* type);
 };
 #endif // ! SHADER_CLASS_H
