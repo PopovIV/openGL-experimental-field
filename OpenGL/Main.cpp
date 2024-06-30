@@ -1,3 +1,7 @@
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -171,24 +175,8 @@ int main() {
 	brickTex.texUnit(shaderProgram, "tex0", 0);
 
 	// Cube and pyramid params
-	glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	glm::vec3 lightPos = glm::vec3(0.5f, 0.5f, 0.5f);
-	glm::mat4 lightModel = glm::mat4(1.0f);
-	lightModel = glm::translate(lightModel, lightPos);
-
-	glm::vec3 pyramidPos = glm::vec3(0.0f, 0.0f, 0.0f);
-	glm::mat4 pyramidModel = glm::mat4(1.0f);
-	pyramidModel = glm::translate(pyramidModel, pyramidPos);
-
-	lightShader.Activate();
-	glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(lightModel));
-	glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
-	
-	shaderProgram.Activate();
-	glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(pyramidModel));
-	glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
-	glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
-
+	float lightPos[3] = { 0.5f, 0.5f, 0.5f };
+	float lightColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 	// Pyramid rotation
 	float rotation = 0.0f;
@@ -199,6 +187,16 @@ int main() {
 
 	Camera camera(WINDOW_WIDHT, WINDOW_HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f));
 
+	// ImGui Initialization
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)(io);
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init("#version 330");
+
+	// dbgVar to draw 
+	bool drawBox = false;
+
 	// Main loop
 	while (!glfwWindowShouldClose(window)) {
 		// Set up color of back buffer
@@ -206,8 +204,14 @@ int main() {
 		// Clean back and depth buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
 		// Camera update
-		camera.HandleInput(window);
+		if (!io.WantCaptureMouse) {
+	        camera.HandleInput(window);
+		}
 		camera.Update(FIELD_OF_VIEW, Z_NEAR, Z_FAR);
 
 		// objects update
@@ -217,18 +221,20 @@ int main() {
 			prevTime = curTime;
 		}
 
-		// Model matrix stuff
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f));
+		// Pyramid matrix stuff
+		glm::mat4 pyramidModel = glm::mat4(1.0f);
+		pyramidModel = glm::rotate(pyramidModel, glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f));
 
 		// Render pyramid
 		// Set up shader program
 		shaderProgram.Activate();
-		// Update camera pos on gpu
+		// Update shader data
  	    glUniform3f(glGetUniformLocation(shaderProgram.ID, "camPos"), camera.position.x, camera.position.y, camera.position.z);
+		glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor[0], lightColor[1], lightColor[2], lightColor[3]);
+		glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos[0], lightPos[1], lightPos[2]);
 		// Update matries
 		camera.UpdateMatrix(shaderProgram, "camMatrix");
-		glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(model));
+		glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(pyramidModel));
 		// Bind texture
 		brickTex.Bind();
 		// Bind VAO
@@ -238,21 +244,45 @@ int main() {
 		//
 
 		// Render Light
-		// Set up light shader
-		lightShader.Activate();
-		// Export the camMatrix to the Vertex Shader of the light cube
-		camera.UpdateMatrix(lightShader, "camMatrix");
-		// Bind the VAO so OpenGL knows to use it
-		cubeVAO.Bind();
-		// Draw primitives, number of indices, datatype of indices, index of indices
-		glDrawElements(GL_TRIANGLES, sizeof(cubeIndices) / sizeof(int), GL_UNSIGNED_INT, 0);
-		
+		if (drawBox) {
+			// Update matrices
+			glm::mat4 lightModel = glm::mat4(1.0f);
+			lightModel = glm::translate(lightModel, glm::vec3(lightPos[0], lightPos[1], lightPos[2]));
+
+			// Set up light shader
+			lightShader.Activate();
+			// Update shader data
+			glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(lightModel));
+			glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), lightColor[0], lightColor[1], lightColor[2], lightColor[3]);
+			// Export the camMatrix to the Vertex Shader of the light cube
+			camera.UpdateMatrix(lightShader, "camMatrix");
+			// Bind the VAO so OpenGL knows to use it
+			cubeVAO.Bind();
+			// Draw primitives, number of indices, datatype of indices, index of indices
+			glDrawElements(GL_TRIANGLES, sizeof(cubeIndices) / sizeof(int), GL_UNSIGNED_INT, 0);
+		}
+
+		// ImGui Window
+		ImGui::Begin("ImGui");
+		ImGui::Checkbox("Visualize light source", &drawBox);
+		ImGui::SliderFloat3("Light pos", lightPos, -10.0f, 10.0f);
+		ImGui::ColorEdit3("Light color", lightColor);
+		//ImGui::ShowDemoWindow();
+		ImGui::End();
+
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 		// Swap buffers
 		glfwSwapBuffers(window);
 
 		// Event handling
 		glfwPollEvents();
 	}
+
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 
 	// Delete buffers
 	VAO1.Delete();
