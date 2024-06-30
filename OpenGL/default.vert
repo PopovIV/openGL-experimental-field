@@ -1,6 +1,6 @@
 // Vertex Shader source code
 
-#version  330 cire
+#version 330 core
 layout (location = 0) in vec3 aPos;
 void main()
 {
