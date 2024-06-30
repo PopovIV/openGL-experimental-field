@@ -8,6 +8,7 @@
 
 #include "Texture.h"
 #include "shaderClass.h"
+#include "Camera.h"
 #include "EBO.h"
 #include "VAO.h"
 
@@ -108,14 +109,20 @@ int main() {
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
 
+	Camera camera(WINDOW_WIDHT, WINDOW_HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f));
+
 	// Main loop
 	while (!glfwWindowShouldClose(window)) {
 		// Set up color of back buffer
-		glClearColor(0.2f, 0.5f, 0.7f, 1.0f);
+		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
 		// Clean back and depth buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		// Set up shader program
 		shaderProgram.Activate();
+
+		// Camera update
+		camera.HandleInput(window);
+		camera.Update(FIELD_OF_VIEW, Z_NEAR, Z_FAR, shaderProgram, "camMatrix");
 
 		double curTime = glfwGetTime();
 		if (curTime - prevTime >= 1 / 60) {
@@ -123,26 +130,13 @@ int main() {
 			prevTime = curTime;
 		}
 
-		// Matrix stuff
+		// Model matrix stuff
 		glm::mat4 model = glm::mat4(1.0f);
-		glm::mat4 view = glm::mat4(1.0f);
-		glm::mat4 proj = glm::mat4(1.0f);
-
-		// Change matricies
 		model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f));
-
-		view = glm::translate(view, glm::vec3(0.0f, -0.5f, -2.0f));
-
-		float aspectRatio = (float)(WINDOW_WIDHT / WINDOW_HEIGHT);
-		proj = glm::perspective(glm::radians(FIELD_OF_VIEW), aspectRatio, Z_NEAR, Z_FAR);
 
 		// Send matricies to vertex shader
 		int modelLoc = glGetUniformLocation(shaderProgram.ID, "model");
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		int viewLoc = glGetUniformLocation(shaderProgram.ID, "view");
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-		int projLoc = glGetUniformLocation(shaderProgram.ID, "proj");
-		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
 
 		// Set up uniform variable for scale
 		glUniform1f(uniID, 0.5f);
