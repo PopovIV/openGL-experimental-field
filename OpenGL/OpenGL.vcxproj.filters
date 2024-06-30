@@ -75,5 +75,8 @@
     <Image Include="..\..\..\..\Downloads\pop_cat.png">
       <Filter>Файлы ресурсов\textures</Filter>
     </Image>
+    <Image Include="brick.png">
+      <Filter>Файлы ресурсов\textures</Filter>
+    </Image>
   </ItemGroup>
 </Project>

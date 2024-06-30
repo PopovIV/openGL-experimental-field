@@ -2,6 +2,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stb/stb_image.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "Texture.h"
 #include "shaderClass.h"
@@ -11,21 +14,30 @@
 
 #define WINDOW_HEIGHT 800
 #define WINDOW_WIDHT 800
+#define FIELD_OF_VIEW 45.0f
+#define Z_NEAR 0.1f
+#define Z_FAR 100.0f
 
 // Vertices coordinates
 GLfloat vertices[] =
 { //     COORDINATES     /        COLORS      /   TexCoord  //
-	-0.5f, -0.5f, 0.0f,     1.0f, 0.0f, 0.0f,	0.0f, 0.0f, // Lower left corner
-	-0.5f,  0.5f, 0.0f,     0.0f, 1.0f, 0.0f,	0.0f, 1.0f, // Upper left corner
-	 0.5f,  0.5f, 0.0f,     0.0f, 0.0f, 1.0f,	1.0f, 1.0f, // Upper right corner
-	 0.5f, -0.5f, 0.0f,     1.0f, 1.0f, 1.0f,	1.0f, 0.0f  // Lower right corner
+	-0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	0.0f, 0.0f,
+	-0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	5.0f, 0.0f,
+	 0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	0.0f, 0.0f,
+	 0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	5.0f, 0.0f,
+	 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	2.5f, 5.0f
 };
+
 
 // Indices for vertices order
 GLuint indices[] =
 {
-	0, 2, 1, // Upper triangle
-	0, 3, 2 // Lower triangle
+	0, 1, 2,
+	0, 2, 3,
+	0, 1, 4,
+	1, 2, 4,
+	2, 3, 4,
+	3, 0, 4
 };
 
 
@@ -85,29 +97,64 @@ int main() {
 	// ID of uniform variable called "scale"
 	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
 
-
 	// Texture
-	Texture popCat("pop_cat.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
-	popCat.texUnit(shaderProgram, "tex0", 0);
+	Texture brickTex("brick.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+	brickTex.texUnit(shaderProgram, "tex0", 0);
+
+	// Pyramid rotation
+	float rotation = 0.0f;
+	double prevTime = glfwGetTime();
+
+	// Enable depth test
+	glEnable(GL_DEPTH_TEST);
 
 	// Main loop
 	while (!glfwWindowShouldClose(window)) {
+		// Set up color of back buffer
 		glClearColor(0.2f, 0.5f, 0.7f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		// Clean back and depth buffer
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		// Set up shader program
 		shaderProgram.Activate();
 
-		// Set up uniform variable
+		double curTime = glfwGetTime();
+		if (curTime - prevTime >= 1 / 60) {
+			rotation += 0.5f;
+			prevTime = curTime;
+		}
+
+		// Matrix stuff
+		glm::mat4 model = glm::mat4(1.0f);
+		glm::mat4 view = glm::mat4(1.0f);
+		glm::mat4 proj = glm::mat4(1.0f);
+
+		// Change matricies
+		model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f));
+
+		view = glm::translate(view, glm::vec3(0.0f, -0.5f, -2.0f));
+
+		float aspectRatio = (float)(WINDOW_WIDHT / WINDOW_HEIGHT);
+		proj = glm::perspective(glm::radians(FIELD_OF_VIEW), aspectRatio, Z_NEAR, Z_FAR);
+
+		// Send matricies to vertex shader
+		int modelLoc = glGetUniformLocation(shaderProgram.ID, "model");
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		int viewLoc = glGetUniformLocation(shaderProgram.ID, "view");
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+		int projLoc = glGetUniformLocation(shaderProgram.ID, "proj");
+		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
+
+		// Set up uniform variable for scale
 		glUniform1f(uniID, 0.5f);
 
 		// Bind texture
-		popCat.Bind();
+		brickTex.Bind();
 
 		// Bind VAO
 		VAO1.Bind();
 		
 		// Draw call
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, 0);
 
 		// Swap buffers
 		glfwSwapBuffers(window);
@@ -121,7 +168,7 @@ int main() {
 	VBO1.Delete();
 	EBO1.Delete();
 	shaderProgram.Delete();
-	popCat.Delete();
+	brickTex.Delete();
 
 	// Destroy window
 	glfwDestroyWindow(window);
