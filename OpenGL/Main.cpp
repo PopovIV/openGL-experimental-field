@@ -10,11 +10,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Texture.h"
-#include "shaderClass.h"
-#include "Camera.h"
-#include "EBO.h"
-#include "VAO.h"
+#include "Mesh.h"
 
 
 #define WINDOW_HEIGHT 800
@@ -24,28 +20,28 @@
 #define Z_FAR 100.0f
 
 // Vertices coordinates
-GLfloat pyramidVertices[] =
-{ //     COORDINATES     /        COLORS          /    TexCoord   /        NORMALS       //
-	-0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,      0.0f, -1.0f, 0.0f, // Bottom side
-	-0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 5.0f,      0.0f, -1.0f, 0.0f, // Bottom side
-	 0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 5.0f,      0.0f, -1.0f, 0.0f, // Bottom side
-	 0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, -1.0f, 0.0f, // Bottom side
+Vertex pyramidVertices[] =
+{ //                 COORDINATES     /        NORMALS                     /          COLORS        /        TEXTURE COORDS      //
+	Vertex{glm::vec3(-0.5f, 0.0f,  0.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.83f, 0.70f, 0.44f), glm::vec2(0.0f, 0.0f)}, // Bottom side
+	Vertex{glm::vec3(-0.5f, 0.0f, -0.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.83f, 0.70f, 0.44f), glm::vec2(0.0f, 5.0f)}, // Bottom side
+	Vertex{glm::vec3(0.5f, 0.0f, -0.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.83f, 0.70f, 0.44f), glm::vec2(5.0f, 5.0f)}, // Bottom side
+	Vertex{glm::vec3(0.5f, 0.0f,  0.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.83f, 0.70f, 0.44f), glm::vec2(5.0f, 0.0f)}, // Bottom side
 
-	-0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,     -0.8f, 0.5f,  0.0f, // Left Side
-	-0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,     -0.8f, 0.5f,  0.0f, // Left Side
-	 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,     -0.8f, 0.5f,  0.0f, // Left Side
+	Vertex{glm::vec3(-0.5f, 0.0f,  0.5f), glm::vec3(-0.8f, 0.5f,  0.0f), glm::vec3(0.83f, 0.70f, 0.44f), glm::vec2(0.0f, 0.0f)}, // Left Side
+	Vertex{glm::vec3(-0.5f, 0.0f, -0.5f), glm::vec3(-0.8f, 0.5f,  0.0f), glm::vec3(0.83f, 0.70f, 0.44f), glm::vec2(5.0f, 0.0f)}, // Left Side
+	Vertex{glm::vec3(0.0f, 0.8f,  0.0f), glm::vec3(-0.8f, 0.5f,  0.0f), glm::vec3(0.83f, 0.70f, 0.44f), glm::vec2(2.5f, 5.0f)}, // Left Side
 
-	-0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
-	 0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 0.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
-	 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
+	Vertex{glm::vec3(-0.5f, 0.0f, -0.5f), glm::vec3(0.0f, 0.5f, -0.8f), glm::vec3(0.83f, 0.70f, 0.44f), glm::vec2(5.0f, 0.0f)}, // Non-facing side
+	Vertex{glm::vec3(0.5f, 0.0f, -0.5f), glm::vec3(0.0f, 0.5f, -0.8f), glm::vec3(0.83f, 0.70f, 0.44f), glm::vec2(0.0f, 0.0f)}, // Non-facing side
+	Vertex{glm::vec3(0.0f, 0.8f,  0.0f), glm::vec3(0.0f, 0.5f, -0.8f), glm::vec3(0.83f, 0.70f, 0.44f), glm::vec2(2.5f, 5.0f)}, // Non-facing side
 
-	 0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 0.0f,      0.8f, 0.5f,  0.0f, // Right side
-	 0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.8f, 0.5f,  0.0f, // Right side
-	 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.8f, 0.5f,  0.0f, // Right side
+	Vertex{glm::vec3(0.5f, 0.0f, -0.5f), glm::vec3(0.8f, 0.5f,  0.0f), glm::vec3(0.83f, 0.70f, 0.44f), glm::vec2(0.0f, 0.0f)}, // Right side
+	Vertex{glm::vec3(0.5f, 0.0f,  0.5f), glm::vec3(0.8f, 0.5f,  0.0f), glm::vec3(0.83f, 0.70f, 0.44f), glm::vec2(5.0f, 0.0f)}, // Right side
+	Vertex{glm::vec3(0.0f, 0.8f,  0.0f), glm::vec3(0.8f, 0.5f,  0.0f), glm::vec3(0.83f, 0.70f, 0.44f), glm::vec2(2.5f, 5.0f)}, // Right side
 
-	 0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, 0.5f,  0.8f, // Facing side
-	-0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,      0.0f, 0.5f,  0.8f, // Facing side
-	 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.0f, 0.5f,  0.8f  // Facing side
+	Vertex{glm::vec3(0.5f, 0.0f,  0.5f), glm::vec3(0.0f, 0.5f,  0.8f), glm::vec3(0.83f, 0.70f, 0.44f), glm::vec2(5.0f, 0.0f)}, // Facing side
+	Vertex{glm::vec3(-0.5f, 0.0f,  0.5f), glm::vec3(0.0f, 0.5f,  0.8f), glm::vec3(0.83f, 0.70f, 0.44f), glm::vec2(0.0f, 0.0f)}, // Facing side
+	Vertex{glm::vec3(0.0f, 0.8f,  0.0f), glm::vec3(0.0f, 0.5f,  0.8f), glm::vec3(0.83f, 0.70f, 0.44f), glm::vec2(2.5f, 5.0f)} // Facing side
 };
 
 
@@ -61,16 +57,34 @@ GLuint pyramidIndices[] =
 };
 
 
-GLfloat cubeVertices[] =
-{ //     COORDINATES     //
-	-0.1f, -0.1f,  0.1f,
-	-0.1f, -0.1f, -0.1f,
-	 0.1f, -0.1f, -0.1f,
-	 0.1f, -0.1f,  0.1f,
-	-0.1f,  0.1f,  0.1f,
-	-0.1f,  0.1f, -0.1f,
-	 0.1f,  0.1f, -0.1f,
-	 0.1f,  0.1f,  0.1f
+// Vertices coordinates
+Vertex floorVertices[] =
+{ //               COORDINATES           /            COLORS          /           NORMALS         /       TEXTURE COORDINATES    //
+	Vertex{glm::vec3(-1.0f, 0.0f,  1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f)},
+	Vertex{glm::vec3(-1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
+	Vertex{glm::vec3(1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
+	Vertex{glm::vec3(1.0f, 0.0f,  1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f)}
+};
+
+
+// Indices for vertices order
+GLuint floorIndices[] =
+{
+	0, 1, 2,
+	0, 2, 3
+};
+
+
+Vertex cubeVertices[] =
+{   //     COORDINATES     //
+	Vertex{glm::vec3(-0.1f, -0.1f,  0.1f)},
+	Vertex{glm::vec3(-0.1f, -0.1f, -0.1f)},
+	Vertex{glm::vec3(0.1f, -0.1f, -0.1f)},
+	Vertex{glm::vec3(0.1f, -0.1f,  0.1f)},
+	Vertex{glm::vec3(-0.1f,  0.1f,  0.1f)},
+	Vertex{glm::vec3(-0.1f,  0.1f, -0.1f)},
+	Vertex{glm::vec3(0.1f,  0.1f, -0.1f)},
+	Vertex{glm::vec3(0.1f,  0.1f,  0.1f)}
 };
 
 
@@ -122,57 +136,45 @@ int main() {
 	// Set up the viewport
 	glViewport(0, 0, WINDOW_WIDHT, WINDOW_HEIGHT);
 
+	// Textures
+	Texture texturesPyramid[]
+	{
+        Texture("brick.png", GL_TEXTURE_2D, TextureClass::DIFFUSE, 0, GL_RGBA, GL_UNSIGNED_BYTE)
+	};
+
     // MAIN SHADER
 	// Create shader program using default shaders
 	Shader shaderProgram("default.vert", "default.frag");
+	// Fill mesh data
+	std::vector<Vertex> verts(pyramidVertices, pyramidVertices + sizeof(pyramidVertices) / sizeof(Vertex));
+	std::vector<GLuint> ind(pyramidIndices, pyramidIndices + sizeof(pyramidIndices) / sizeof(GLuint));
+	std::vector<Texture> tex(texturesPyramid, texturesPyramid + sizeof(texturesPyramid) / sizeof(Texture));
+	// Create pyramid mesh
+	Mesh pyramid(verts, ind, tex);
 
-	// Create vertex array object and bind it
-	VAO VAO1;
-	VAO1.Bind();
 
-	// Create vertex buffer object and link it to vertices
-	VBO VBO1(pyramidVertices, sizeof(pyramidVertices));
-	// Create elements buffer object and link it to indices
-	EBO EBO1(pyramidIndices, sizeof(pyramidIndices));
+	// TODO: go to common texture array
+	Texture texturesFloor[]
+	{
+		Texture("planks.png", GL_TEXTURE_2D, TextureClass::DIFFUSE, 0, GL_RGBA, GL_UNSIGNED_BYTE)
+	};
 
-	// Link VBO to VAO
-	// For basics 11 floats is per vertex data rn
-	VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 11 * sizeof(float), (void*)0);
-	VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 11 * sizeof(float), (void*)(3 * sizeof(float)));
-	VAO1.LinkAttrib(VBO1, 2, 2, GL_FLOAT, 11 * sizeof(float), (void*)(6 * sizeof(float)));
-	VAO1.LinkAttrib(VBO1, 3, 3, GL_FLOAT, 11 * sizeof(float), (void*)(8 * sizeof(float)));
-	// Unbind all
-	VAO1.Unbind();
-	VBO1.Unbind();
-	EBO1.Unbind();
-	//
+	// Fill mesh data
+	std::vector<Vertex> floorVerts(floorVertices, floorVertices + sizeof(floorVertices) / sizeof(Vertex));
+	std::vector<GLuint> floorInd(floorIndices, floorIndices + sizeof(floorIndices) / sizeof(GLuint));
+	std::vector<Texture> floorTex(texturesFloor, texturesFloor + sizeof(texturesFloor) / sizeof(Texture));
+	// Create pyramid mesh
+	Mesh floor(floorVerts, floorInd, floorTex);
+
 
 	// CUBE/LIGHT SHADER
 	// Create shader program using light shaders
 	Shader lightShader("light.vert", "light.frag");
-
-	// Create vertex array object and bind it
-	VAO cubeVAO;
-	cubeVAO.Bind();
-
-	// Create vertex buffer object and link it to vertices
-	VBO cubeVBO(cubeVertices, sizeof(cubeVertices));
-	// Create elements buffer object and link it to indices
-	EBO cubeEBO(cubeIndices, sizeof(cubeIndices));
-
-	// Link VBO to VAO
-	VAO1.LinkAttrib(cubeVBO, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
-
-	// Unbind all
-	cubeVAO.Unbind();
-	cubeVBO.Unbind();
-	cubeEBO.Unbind();
-	//
-	
-
-	// Texture
-	Texture brickTex("brick.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
-	brickTex.texUnit(shaderProgram, "tex0", 0);
+	// Fill mesh data
+	std::vector<Vertex> lightVert(cubeVertices, cubeVertices + sizeof(cubeVertices) / sizeof(Vertex));
+	std::vector<GLuint> lightInd(cubeIndices, cubeIndices + sizeof(cubeIndices) / sizeof(GLuint));
+	// Create light mesh
+	Mesh light(lightVert, lightInd, tex);
 
 	// Cube and pyramid params
 	float lightPos[3] = { 0.5f, 0.5f, 0.5f };
@@ -223,25 +225,18 @@ int main() {
 
 		// Pyramid matrix stuff
 		glm::mat4 pyramidModel = glm::mat4(1.0f);
-		pyramidModel = glm::rotate(pyramidModel, glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f));
 
-		// Render pyramid
-		// Set up shader program
-		shaderProgram.Activate();
+		// Render floor and pyramid
 		// Update shader data
- 	    glUniform3f(glGetUniformLocation(shaderProgram.ID, "camPos"), camera.position.x, camera.position.y, camera.position.z);
+		shaderProgram.Activate();
+		glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(pyramidModel));
 		glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor[0], lightColor[1], lightColor[2], lightColor[3]);
 		glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos[0], lightPos[1], lightPos[2]);
-		// Update matries
-		camera.UpdateMatrix(shaderProgram, "camMatrix");
+		floor.Draw(shaderProgram, camera);
+
+		pyramidModel = glm::rotate(pyramidModel, glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(pyramidModel));
-		// Bind texture
-		brickTex.Bind();
-		// Bind VAO
-		VAO1.Bind();
-		// Draw call
-		glDrawElements(GL_TRIANGLES, sizeof(pyramidIndices) / sizeof(int), GL_UNSIGNED_INT, 0);
-		//
+		pyramid.Draw(shaderProgram, camera);
 
 		// Render Light
 		if (drawBox) {
@@ -254,12 +249,8 @@ int main() {
 			// Update shader data
 			glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(lightModel));
 			glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), lightColor[0], lightColor[1], lightColor[2], lightColor[3]);
-			// Export the camMatrix to the Vertex Shader of the light cube
-			camera.UpdateMatrix(lightShader, "camMatrix");
-			// Bind the VAO so OpenGL knows to use it
-			cubeVAO.Bind();
-			// Draw primitives, number of indices, datatype of indices, index of indices
-			glDrawElements(GL_TRIANGLES, sizeof(cubeIndices) / sizeof(int), GL_UNSIGNED_INT, 0);
+
+			light.Draw(lightShader, camera);
 		}
 
 		// ImGui Window
@@ -285,15 +276,14 @@ int main() {
 	ImGui::DestroyContext();
 
 	// Delete buffers
-	VAO1.Delete();
-	VBO1.Delete();
-	EBO1.Delete();
 	shaderProgram.Delete();
-	brickTex.Delete();
-	cubeVAO.Delete();
-	cubeVBO.Delete();
-	cubeEBO.Delete();
 	lightShader.Delete();
+	for (Texture& tex : texturesPyramid) {
+		tex.Delete();
+	}
+	for (Texture& tex : texturesFloor) {
+		tex.Delete();
+	}
 
 	// Destroy window
 	glfwDestroyWindow(window);

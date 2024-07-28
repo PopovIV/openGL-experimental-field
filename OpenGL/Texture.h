@@ -6,13 +6,21 @@
 
 #include"shaderClass.h"
 
+enum class TextureClass {
+	DIFFUSE,
+	NORMAL,
+	SPECULAR
+};
+
 class Texture
 {
 public:
 	GLuint ID;
 	GLenum type;
+	TextureClass texClass;
+
 	// Texture constructor
-	Texture(const char* image, GLenum texType, GLenum slot, GLenum format, GLenum pixelType);
+	Texture(const char* image, GLenum texType, TextureClass texClass, GLenum slot, GLenum format, GLenum pixelType);
 
 	// Assign texture unit to texture
 	void texUnit(Shader& shader, const char* uniform, GLuint unit);

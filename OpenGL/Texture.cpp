@@ -1,10 +1,13 @@
 #include"Texture.h"
 
 // Texture constructor
-Texture::Texture(const char* image, GLenum texType, GLenum slot, GLenum format, GLenum pixelType)
+Texture::Texture(const char* image, GLenum texType, TextureClass texClass, GLenum slot, GLenum format, GLenum pixelType)
 {
 	// Assign the type of texture object
 	type = texType;
+
+	// Assign inner class
+	Texture::texClass = texClass;
 
 	// Store the width, height, and the number of color channels of the image
 	int widthImg, heightImg, numColCh;
