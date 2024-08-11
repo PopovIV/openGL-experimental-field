@@ -10,7 +10,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Mesh.h"
+#include "Model.h"
 
 
 #define WINDOW_HEIGHT 800
@@ -150,7 +150,7 @@ int main() {
 	std::vector<GLuint> ind(pyramidIndices, pyramidIndices + sizeof(pyramidIndices) / sizeof(GLuint));
 	std::vector<Texture> tex(texturesPyramid, texturesPyramid + sizeof(texturesPyramid) / sizeof(Texture));
 	// Create pyramid mesh
-	Mesh pyramid(verts, ind, tex);
+	//Mesh pyramid(verts, ind, tex);
 
 
 	// TODO: go to common texture array
@@ -186,6 +186,8 @@ int main() {
 
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
+
+	Model backpackModel("backpack.obj");
 
 	Camera camera(WINDOW_WIDHT, WINDOW_HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f));
 
@@ -232,11 +234,12 @@ int main() {
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(pyramidModel));
 		glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor[0], lightColor[1], lightColor[2], lightColor[3]);
 		glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos[0], lightPos[1], lightPos[2]);
-		floor.Draw(shaderProgram, camera);
+		//floor.Draw(shaderProgram, camera);
 
-		pyramidModel = glm::rotate(pyramidModel, glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f));
+		//pyramidModel = glm::rotate(pyramidModel, glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(pyramidModel));
-		pyramid.Draw(shaderProgram, camera);
+		//pyramid.Draw(shaderProgram, camera);
+		backpackModel.Draw(shaderProgram, camera);
 
 		// Render Light
 		if (drawBox) {

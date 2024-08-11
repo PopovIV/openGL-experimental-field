@@ -11,6 +11,7 @@ in vec3 color;
 in vec2 texCoord;
 
 uniform sampler2D diffuse0;
+
 // Light stuff
 uniform vec3 camPos;
 uniform vec4 lightColor;

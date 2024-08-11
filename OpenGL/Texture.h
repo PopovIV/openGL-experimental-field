@@ -18,8 +18,10 @@ public:
 	GLuint ID;
 	GLenum type;
 	TextureClass texClass;
+	std::string path;
 
 	// Texture constructor
+	Texture() {}; // TMP solution
 	Texture(const char* image, GLenum texType, TextureClass texClass, GLenum slot, GLenum format, GLenum pixelType);
 
 	// Assign texture unit to texture
