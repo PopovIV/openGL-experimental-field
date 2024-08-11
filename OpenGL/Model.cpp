@@ -115,6 +115,7 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType 
         if (!skip) {   // if texture hasn't been loaded already, load it
             Texture texture;
             texture.ID = TextureFromFile(str.C_Str(), this->directory);
+            texture.type = GL_TEXTURE_2D;
             texture.texClass = textureClass;
             texture.path = str.C_Str();
 
@@ -157,6 +158,8 @@ unsigned int TextureFromFile(const char* path, const std::string& directory, boo
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         stbi_image_free(data);
+
+        glBindTexture(GL_TEXTURE_2D, 0);
     } else {
         std::cout << "Texture failed to load at path: " << path << std::endl;
         stbi_image_free(data);

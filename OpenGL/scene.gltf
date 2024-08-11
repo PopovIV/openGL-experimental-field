@@ -1,0 +1,545 @@
+{
+  "accessors": [
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 65532,
+      "max": [
+        1.4055975675582886,
+        1.6134586334228516,
+        4.241661548614502
+      ],
+      "min": [
+        -1.6640132665634155,
+        -1.485527753829956,
+        -1.7703317403793335
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 786384,
+      "componentType": 5126,
+      "count": 65532,
+      "max": [
+        0.9999984502792358,
+        0.9999962449073792,
+        0.9998344779014587
+      ],
+      "min": [
+        -0.9999932050704956,
+        -0.9999882578849792,
+        -0.9999977946281433
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5126,
+      "count": 65532,
+      "max": [
+        0.9999998211860657,
+        0.9999993443489075,
+        0.9997856020927429,
+        1.0
+      ],
+      "min": [
+        -0.9999996423721313,
+        -0.9999990463256836,
+        -0.9998345971107483,
+        -1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 65532,
+      "max": [
+        1.1940672397613525,
+        2.117830276489258
+      ],
+      "min": [
+        -1.9593877792358398,
+        -0.4681691825389862
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 524256,
+      "componentType": 5126,
+      "count": 65532,
+      "max": [
+        1.1940672397613525,
+        2.117830276489258
+      ],
+      "min": [
+        -1.9593877792358398,
+        -0.4681691825389862
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 358584,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 1572768,
+      "componentType": 5126,
+      "count": 7110,
+      "max": [
+        1.1048407554626465,
+        0.6733905076980591,
+        5.416771411895752
+      ],
+      "min": [
+        -1.3948454856872559,
+        -0.3899865448474884,
+        2.173875570297241
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 1658088,
+      "componentType": 5126,
+      "count": 7110,
+      "max": [
+        0.9999116659164429,
+        0.9997629523277283,
+        0.9995278716087341
+      ],
+      "min": [
+        -0.9999962449073792,
+        -0.9998320937156677,
+        -0.994106113910675
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "byteOffset": 1048512,
+      "componentType": 5126,
+      "count": 7110,
+      "max": [
+        0.9999950528144836,
+        0.999839186668396,
+        0.9998736381530762,
+        1.0
+      ],
+      "min": [
+        -0.99989914894104,
+        -0.9998660683631897,
+        -0.9997925162315369,
+        -1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1048512,
+      "componentType": 5126,
+      "count": 7110,
+      "max": [
+        1.0689750909805298,
+        1.456727385520935
+      ],
+      "min": [
+        -1.1397078037261963,
+        0.788543701171875
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1105392,
+      "componentType": 5126,
+      "count": 7110,
+      "max": [
+        1.0689750909805298,
+        1.456727385520935
+      ],
+      "min": [
+        -1.1397078037261963,
+        0.788543701171875
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 1434336,
+      "componentType": 5125,
+      "count": 39444,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 1743408,
+      "componentType": 5126,
+      "count": 856,
+      "max": [
+        0.19246208667755127,
+        0.34794360399246216,
+        5.551900863647461
+      ],
+      "min": [
+        -0.24038711190223694,
+        -0.25279438495635986,
+        4.7547197341918945
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 1753680,
+      "componentType": 5126,
+      "count": 856,
+      "max": [
+        0.9963369965553284,
+        0.9979889392852783,
+        0.9996534585952759
+      ],
+      "min": [
+        -0.9927472472190857,
+        -0.9679081439971924,
+        -0.07644477486610413
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "byteOffset": 1162272,
+      "componentType": 5126,
+      "count": 856,
+      "max": [
+        0.7579448819160461,
+        0.5940854549407959,
+        0.9999954104423523,
+        1.0
+      ],
+      "min": [
+        -0.9956843256950378,
+        -0.9998886585235596,
+        -0.9769910573959351,
+        -1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1162272,
+      "componentType": 5126,
+      "count": 856,
+      "max": [
+        0.9758052825927734,
+        0.9757615327835083
+      ],
+      "min": [
+        0.02386229857802391,
+        0.023847702890634537
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1169120,
+      "componentType": 5126,
+      "count": 856,
+      "max": [
+        0.9758052825927734,
+        0.9757615327835083
+      ],
+      "min": [
+        0.02386229857802391,
+        0.023847702890634537
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 1592112,
+      "componentType": 5125,
+      "count": 4959,
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "PlantCatalog (https://sketchfab.com/PlantCatalog)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/realistic-hd-northern-red-oak-134138-b5724f5b66814834a718b85bacb98460",
+      "title": "Realistic HD Northern red oak (134/138)"
+    },
+    "generator": "Sketchfab-16.14.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 1611948,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 1175968,
+      "byteOffset": 1611948,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 1763952,
+      "byteOffset": 2787916,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 1175968,
+      "byteOffset": 4551868,
+      "byteStride": 16,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 5727836,
+      "uri": "scene.bin"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/Quercus_rub_dead_br_baseColor.png"
+    },
+    {
+      "uri": "textures/Quercus_rub_dead_br_normal.png"
+    },
+    {
+      "uri": "textures/Quercus_rub_br_cut_01_baseColor.png"
+    },
+    {
+      "uri": "textures/Quercus_rub_br_cut_01_normal.png"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "name": "Quercus_rub_dead_br",
+      "normalTexture": {
+        "index": 1,
+        "texCoord": 1
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.8789109981674741
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "Quercus_rub_br_cut_01",
+      "normalTexture": {
+        "index": 3
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 2
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.8931104144514707
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Quercus_rubra_HD_Quercus rub dead br_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TANGENT": 2,
+            "TEXCOORD_0": 3,
+            "TEXCOORD_1": 4
+          },
+          "indices": 5,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Quercus_rubra_HD_Quercus rub dead br_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 7,
+            "POSITION": 6,
+            "TANGENT": 8,
+            "TEXCOORD_0": 9,
+            "TEXCOORD_1": 10
+          },
+          "indices": 11,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Quercus_rubra_HD_Quercus rub br cut 01_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 13,
+            "POSITION": 12,
+            "TANGENT": 14,
+            "TEXCOORD_0": 15,
+            "TEXCOORD_1": 16
+          },
+          "indices": 17,
+          "material": 1,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.220446049250313e-16,
+        -1.0,
+        0.0,
+        0.0,
+        1.0,
+        2.220446049250313e-16,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [
+        2
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        -1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Quercus rubra HD_Snag 1 dead_LOD0.fbx"
+    },
+    {
+      "children": [
+        3
+      ],
+      "name": "RootNode"
+    },
+    {
+      "children": [
+        4,
+        5,
+        6
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.220446049250313e-16,
+        -1.0,
+        0.0,
+        0.0,
+        1.0,
+        2.220446049250313e-16,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Quercus_rubra_HD"
+    },
+    {
+      "mesh": 0,
+      "name": "Quercus_rubra_HD_Quercus rub dead br_0"
+    },
+    {
+      "mesh": 1,
+      "name": "Quercus_rubra_HD_Quercus rub dead br_0"
+    },
+    {
+      "mesh": 2,
+      "name": "Quercus_rubra_HD_Quercus rub br cut 01_0"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 0,
+      "source": 1
+    },
+    {
+      "sampler": 0,
+      "source": 2
+    },
+    {
+      "sampler": 0,
+      "source": 3
+    }
+  ]
+}

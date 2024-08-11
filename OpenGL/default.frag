@@ -17,6 +17,23 @@ uniform vec3 camPos;
 uniform vec4 lightColor;
 uniform vec3 lightPos;
 
+// hardcode
+float near = 0.1f;
+float far = 100.0f;
+
+
+float linearizeDepth(float depth)
+{
+   return (2.0 * near * far) / (far + near - (depth * 2.0 - 1.0) * (far - near));
+}
+
+
+float logisticDepth(float depth, float steepness = 0.5f, float offset = 5.0f)
+{
+   float zVal = linearizeDepth(depth);
+   return (1.0 / (1.0 + exp(-steepness * (zVal - offset))));
+}
+
 void main()
 {
    float ambient = 0.20f;
@@ -36,5 +53,6 @@ void main()
     float specAmount = pow(max(dot(viewDir, reflectionDir), 0.0f), 8);
     float specular = specAmount * specularLight * atten;
 
-    FragColor = texture(diffuse0, texCoord) * lightColor * (diffuse + ambient + specular);
+    float depth = logisticDepth(gl_FragCoord.z);
+    FragColor = texture(diffuse0, texCoord) * lightColor * (diffuse + ambient + specular) * (1.0f - depth) + vec4(depth * vec3(0.5f, 0.5f, 0.5f), 1.0f);
 }

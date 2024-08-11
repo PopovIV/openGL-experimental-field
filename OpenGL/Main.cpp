@@ -60,10 +60,10 @@ GLuint pyramidIndices[] =
 // Vertices coordinates
 Vertex floorVertices[] =
 { //               COORDINATES           /            COLORS          /           NORMALS         /       TEXTURE COORDINATES    //
-	Vertex{glm::vec3(-1.0f, 0.0f,  1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f)},
-	Vertex{glm::vec3(-1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
-	Vertex{glm::vec3(1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
-	Vertex{glm::vec3(1.0f, 0.0f,  1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f)}
+	Vertex{glm::vec3(-100.0f, 0.0f,  100.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f)},
+	Vertex{glm::vec3(-100.0f, 0.0f, -100.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 100.0f)},
+	Vertex{glm::vec3(100.0f, 0.0f, -100.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(100.0f, 100.0f)},
+	Vertex{glm::vec3(100.0f, 0.0f,  100.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(100.0f, 0.0f)}
 };
 
 
@@ -156,7 +156,7 @@ int main() {
 	// TODO: go to common texture array
 	Texture texturesFloor[]
 	{
-		Texture("planks.png", GL_TEXTURE_2D, TextureClass::DIFFUSE, 0, GL_RGBA, GL_UNSIGNED_BYTE)
+		Texture("pool.png", GL_TEXTURE_2D, TextureClass::DIFFUSE, 0, GL_RGBA, GL_UNSIGNED_BYTE)
 	};
 
 	// Fill mesh data
@@ -177,7 +177,7 @@ int main() {
 	Mesh light(lightVert, lightInd, tex);
 
 	// Cube and pyramid params
-	float lightPos[3] = { 0.5f, 0.5f, 0.5f };
+	float lightPos[3] = { 0.3f, 1.0f, 0.3f };
 	float lightColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 	// Pyramid rotation
@@ -186,8 +186,21 @@ int main() {
 
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 
-	Model backpackModel("backpack.obj");
+	Model treeModel("scene.gltf");
+
+	// Just for this scene shit, need instancing ASAP
+	const int treeCount = 100;
+	glm::mat4 treeModelMatrix[treeCount];
+	for (int i = 0; i < treeCount; i++) {
+		treeModelMatrix[i] = glm::mat4(1.0f);
+		if (i != 0) {
+			treeModelMatrix[i] = glm::translate(treeModelMatrix[i], glm::vec3(-100 + (std::rand() % 200), 0, -100 + (std::rand() % 200)));
+		}
+		treeModelMatrix[i] = glm::rotate(treeModelMatrix[i], glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		treeModelMatrix[i] = glm::scale(treeModelMatrix[i], glm::vec3(0.5, 0.5, 0.5));
+	}
 
 	Camera camera(WINDOW_WIDHT, WINDOW_HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f));
 
@@ -204,7 +217,7 @@ int main() {
 	// Main loop
 	while (!glfwWindowShouldClose(window)) {
 		// Set up color of back buffer
-		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 		// Clean back and depth buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -228,18 +241,26 @@ int main() {
 		// Pyramid matrix stuff
 		glm::mat4 pyramidModel = glm::mat4(1.0f);
 
+		glm::vec3 lightPosGLM = glm::vec3(lightPos[0], lightPos[1], lightPos[2]);
+		lightPosGLM = glm::rotate(lightPosGLM, glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f));
+
 		// Render floor and pyramid
 		// Update shader data
 		shaderProgram.Activate();
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(pyramidModel));
 		glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor[0], lightColor[1], lightColor[2], lightColor[3]);
-		glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos[0], lightPos[1], lightPos[2]);
-		//floor.Draw(shaderProgram, camera);
+		glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPosGLM.x, lightPosGLM.y, lightPosGLM.z);
+		floor.Draw(shaderProgram, camera);
 
 		//pyramidModel = glm::rotate(pyramidModel, glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f));
-		glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(pyramidModel));
+		//glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(pyramidModel));
 		//pyramid.Draw(shaderProgram, camera);
-		backpackModel.Draw(shaderProgram, camera);
+
+		for (int i = 0; i < treeCount; i++) {
+			glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(treeModelMatrix[i]));
+
+			treeModel.Draw(shaderProgram, camera);
+		}
 
 		// Render Light
 		if (drawBox) {
